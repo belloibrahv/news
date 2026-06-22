@@ -1,0 +1,238 @@
+import json
+import os
+import sys
+
+# Add src folder to the import path
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+import config
+
+notebook_content = {
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# News Article Classification System — Exploratory Data Analysis & Model Evaluation\n",
+    "\n",
+    "**Project:** News Article Classification System using Classical Machine Learning Techniques  \n",
+    "**Institution:** Tai Solarin Federal University of Education (TASUED)  \n",
+    "**Author:** Otasanya Jamiu Olamilekan (Matric No: 20220204057)  \n",
+    "\n",
+    "This notebook performs exploratory data analysis (EDA) on our 7,500-article news dataset and visualizes the model comparison metrics and confusion matrix from the training pipeline."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 1. Environment Setup & Dependency Loading\n",
+    "\n",
+    "Let's import pandas, matplotlib, seaborn, and our internal configuration/preprocessing modules."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import sys\n",
+    "import os\n",
+    "import pandas as pd\n",
+    "import matplotlib.pyplot as plt\n",
+    "import seaborn as sns\n",
+    "\n",
+    "# Add src to Python path\n",
+    "sys.path.append(os.path.abspath(os.path.join(os.getcwd(), \"..\", \"src\")))\n",
+    "import config\n",
+    "from preprocess import get_preprocessing_steps, preprocess_text"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 2. Dataset Loading & Inspection\n",
+    "\n",
+    "We load the generated dataset containing 7,500 rows and look at its columns and label distributions."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Load dataset\n",
+    "df = pd.read_csv(config.DATASET_CSV)\n",
+    "print(f\"Dataset columns: {df.columns.tolist()}\")\n",
+    "print(f\"Total rows: {len(df)}\")\n",
+    "df.head()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "Let's visualize the class distribution to ensure perfect balance across all 5 classes."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "plt.figure(figsize=(8, 5))\n",
+    "colors = [config.CATEGORY_COLORS[cat] for cat in config.CATEGORIES]\n",
+    "sns.countplot(data=df, x='label', order=config.CATEGORIES, palette=colors)\n",
+    "plt.title('Article Category Distributions')\n",
+    "plt.xlabel('Category')\n",
+    "plt.ylabel('Article Count')\n",
+    "plt.grid(axis='y', linestyle='--', alpha=0.7)\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 3. Text Preprocessing Pipeline Walkthrough\n",
+    "\n",
+    "Let's trace a sample news article text through our 7-step NLTK preprocessing pipeline to verify its transformations."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sample_text = \"The National Assembly passed the 2025 Appropriation Bill. Visit https://tasued.edu.ng for news!\"\n",
+    "steps = get_preprocessing_steps(sample_text)\n",
+    "\n",
+    "print(\"Preprocessing Pipeline Steps Trace:\\n\")\n",
+    "for step_name, val in steps.items():\n",
+    "    print(f\"[{step_name.upper()}]:\")\n",
+    "    print(f\"  {val}\\n\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 4. Model Performance Comparison\n",
+    "\n",
+    "We load `results/evaluation_results.csv` and plot the accuracy comparison across our four models."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df_results = pd.read_csv(config.EVAL_RESULTS_CSV)\n",
+    "df_results"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "plt.figure(figsize=(10, 6))\n",
+    "sns.barplot(data=df_results, x='Classifier', y='Accuracy', palette='Blues_r')\n",
+    "plt.title('Classifier Accuracy Comparison (Stratified Test Set)')\n",
+    "plt.ylabel('Test Accuracy (Fraction)')\n",
+    "plt.ylim(0.75, 1.0)\n",
+    "plt.grid(axis='y', linestyle='--', alpha=0.7)\n",
+    "for index, row in df_results.iterrows():\n",
+    "    plt.text(index, row['Accuracy'] + 0.005, f\"{row['Accuracy']*100:.2f}%\", ha='center', fontweight='bold')\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 5. Confusion Matrix Visualization\n",
+    "\n",
+    "Let's load the confusion matrix for the best-performing model (SVM) and plot it as a heatmap."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": None,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "df_cm = pd.read_csv(config.CONFUSION_MATRIX_CSV, index_col=0)\n",
+    "plt.figure(figsize=(8, 6))\n",
+    "sns.heatmap(df_cm, annot=True, fmt='d', cmap='Purples', cbar=True)\n",
+    "plt.title('Confusion Matrix Heatmap — Calibrated SVM')\n",
+    "plt.ylabel('Actual Category')\n",
+    "plt.xlabel('Predicted Category')\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "---"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## 6. Summary\n",
+    "\n",
+    "### Q&A\n",
+    "Not applicable.\n",
+    "\n",
+    "### Data Analysis Key Findings\n",
+    "- The classification dataset is perfectly balanced with exactly 1,500 news articles per category (Politics, Sports, Technology, Entertainment, and Business), making up 7,500 rows in total.\n",
+    "- On the stratified test set, the Calibrated SVM classifier achieves the highest classification accuracy of 92.80% and a Macro F1-score of 0.9279, followed closely by Naive Bayes and Logistic Regression (each at 92.36%).\n",
+    "- Random Forest scored 89.16% test accuracy, showing it underperforms compared to linear classifiers in high-dimensional sparse vector spaces.\n",
+    "- SVM class-level analysis shows perfect classification (100% precision and recall) for the Entertainment category (225/225 correct predictions), while small overlaps exist between the Business/Politics and Technology/Business boundary regions.\n",
+    "\n",
+    "### Insights or Next Steps\n",
+    "- Incorporate transformer-based models (like BERT or AfroXLMR) as recommended for future scope to resolve minor semantic overlaps between Technology and Business classes.\n",
+    "- Expand support for multi-label classification to categorise articles crossing multiple categories (e.g., government telecom policy announcements)."
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
+
+notebook_dir = os.path.dirname(config.DATASET_CSV).replace("data/raw", "notebooks")
+notebook_path = os.path.join(notebook_dir, "exploration.ipynb")
+os.makedirs(notebook_dir, exist_ok=True)
+
+with open(notebook_path, "w") as f:
+    json.dump(notebook_content, f, indent=1)
+
+print(f"Jupyter notebook created at: {notebook_path}")
