@@ -1,4 +1,4 @@
-from flask import current_app as app, render_template, request, jsonify, abort
+from flask import Blueprint, render_template, request, jsonify, abort
 import sys
 import os
 
@@ -8,12 +8,15 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "s
 import config
 import predictor
 
-@app.route("/", methods=["GET"])
+# Create Blueprint for main routes
+main_bp = Blueprint("main", __name__)
+
+@main_bp.route("/", methods=["GET"])
 def index():
     """Renders the article submission page."""
     return render_template("index.html", error=None)
 
-@app.route("/classify", methods=["POST"])
+@main_bp.route("/classify", methods=["POST"])
 def classify():
     """
     Accepts raw article text, cleans it, transforms it, running the SVM classifier.
@@ -61,7 +64,7 @@ def classify():
         app.logger.error(f"Error classifying article: {str(e)}")
         return render_template("error.html", message="Classification service is unavailable. Please contact the administrator."), 500
 
-@app.route("/health", methods=["GET"])
+@main_bp.route("/health", methods=["GET"])
 def health():
     """Health check endpoint to verify service readiness."""
     try:

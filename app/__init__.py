@@ -24,8 +24,8 @@ def create_app():
         print(f"FATAL STARTUP ERROR: {str(e)}")
         sys.exit(1)
         
-    # Register routes
-    with app.app_context():
-        from . import routes
+    # Register routes blueprint
+    from .routes import main_bp
+    app.register_blueprint(main_bp)
         
     return app
