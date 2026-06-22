@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+*.pkl
+*.pkl.z
+
+# Data and Models
+data/
+!data/
+data/raw/*
+data/processed/*
+models/*
+!models/.gitkeep
+
+# IDEs
+.idea/
+.vscode/
+.DS_Store
