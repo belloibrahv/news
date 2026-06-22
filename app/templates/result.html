@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classification Result — News Article Classifier</title>
+    <!-- Google Fonts & Material Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        :root {
+            --md-sys-color-primary: #0b57d0;
+            --md-sys-color-surface: #ffffff;
+            --md-sys-color-surface-variant: #f1f3f4;
+            --md-sys-color-background: #f8f9fa;
+            --md-sys-color-on-background: #1f1f1f;
+            --md-sys-color-outline: #747775;
+            
+            --md-shape-corner-medium: 12px;
+            --md-shape-corner-large: 24px;
+            --md-shape-corner-full: 9999px;
+            
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Roboto', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+            line-height: 1.5;
+            padding-bottom: 60px;
+        }
+
+        /* Header / App Bar */
+        .app-bar {
+            display: flex;
+            align-items: center;
+            height: 64px;
+            padding: 0 16px;
+            background-color: var(--md-sys-color-surface);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .app-bar-title {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 500;
+            margin-left: 12px;
+            color: #1f1f1f;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .app-bar-logo {
+            color: var(--md-sys-color-primary);
+            font-size: 28px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 32px auto;
+            padding: 0 16px;
+        }
+
+        /* Result Card */
+        .card {
+            background-color: var(--md-sys-color-surface);
+            border-radius: var(--md-shape-corner-large);
+            padding: 36px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            border: 1px solid var(--md-sys-color-surface-variant);
+        }
+
+        .card-header {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .card-header h2 {
+            font-family: var(--font-display);
+            font-size: 20px;
+            color: #5f6368;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        /* Large Category Badge */
+        .result-badge-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .result-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 32px;
+            border-radius: var(--md-shape-corner-full);
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 600;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        /* Confidence Score Panel */
+        .confidence-panel {
+            background-color: var(--md-sys-color-surface-variant);
+            border-radius: var(--md-shape-corner-medium);
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+
+        .confidence-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-family: var(--font-display);
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .confidence-score {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--md-sys-color-primary);
+        }
+
+        /* Confidence Meter */
+        .meter-container {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(0,0,0,0.05);
+            border-radius: var(--md-shape-corner-full);
+            overflow: hidden;
+        }
+
+        .meter-fill {
+            height: 100%;
+            border-radius: var(--md-shape-corner-full);
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Article Preview Block */
+        .preview-panel {
+            margin-bottom: 32px;
+        }
+
+        .panel-title {
+            font-family: var(--font-display);
+            font-size: 15px;
+            font-weight: 500;
+            color: #5f6368;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .preview-content {
+            background-color: var(--md-sys-color-surface-variant);
+            border-radius: var(--md-shape-corner-medium);
+            padding: 20px;
+            font-family: var(--font-body);
+            font-size: 14.5px;
+            color: #4a4a4a;
+            border-left: 4px solid var(--md-sys-color-primary);
+            font-style: italic;
+        }
+
+        /* Action Buttons */
+        .action-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 24px;
+            font-family: var(--font-display);
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: var(--md-shape-corner-full);
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.2s, box-shadow 0.2s;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background-color: var(--md-sys-color-primary);
+            color: white;
+            border: none;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        }
+
+        .btn-primary:hover {
+            background-color: #0842a0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn-secondary {
+            background-color: var(--md-sys-color-surface);
+            color: var(--md-sys-color-primary);
+            border: 1px solid var(--md-sys-color-outline);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--md-sys-color-surface-variant);
+        }
+
+        /* Footer Info */
+        .footer-info {
+            text-align: center;
+            margin-top: 32px;
+            font-size: 12px;
+            color: #70757a;
+        }
+
+        /* Responsiveness */
+        @media (max-width: 600px) {
+            .container {
+                margin: 16px auto;
+            }
+            .card {
+                padding: 24px;
+            }
+            .result-badge {
+                font-size: 20px;
+                padding: 8px 20px;
+            }
+            .action-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- App Bar -->
+    <header class="app-bar">
+        <div class="app-bar-title">
+            <span class="material-icons app-bar-logo">newspaper</span>
+            <span>News Article Classifier</span>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="container">
+        
+        <!-- Result Card -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Model Classification Result</h2>
+            </div>
+
+            <!-- Predicted Category Badge -->
+            <div class="result-badge-container">
+                <span class="result-badge" style="background-color: {{ badge_color }};">
+                    <span class="material-icons" style="font-size: 32px;">
+                        {% if category == "Politics" %}gavel
+                        {% elif category == "Sports" %}sports_soccer
+                        {% elif category == "Technology" %}memory
+                        {% elif category == "Entertainment" %}theater_comedy
+                        {% elif category == "Business" %}trending_up
+                        {% endif %}
+                    </span>
+                    <span>{{ category }}</span>
+                </span>
+            </div>
+
+            <!-- Confidence Score Panel -->
+            <div class="confidence-panel">
+                <div class="confidence-label-row">
+                    <span>Classification Confidence</span>
+                    <span class="confidence-score">{{ "%.1f"|format(confidence * 100) }}%</span>
+                </div>
+                <div class="meter-container">
+                    <div class="meter-fill" style="width: 0%; background-color: {{ badge_color }};" id="meterFill"></div>
+                </div>
+            </div>
+
+            <!-- Article Preview -->
+            <div class="preview-panel">
+                <div class="panel-title">
+                    <span class="material-icons" style="font-size: 18px;">description</span>
+                    <span>Submitted Article Extract</span>
+                </div>
+                <div class="preview-content">
+                    "{{ article_preview }}"
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="action-row">
+                <a href="/" class="btn btn-primary">
+                    <span class="material-icons">autorenew</span>
+                    <span>Classify Another Article</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer-info">
+            <p>TASUED Department of Computer and Information Science</p>
+            <p>Otasanya Jamiu Olamilekan (Matric No: 20220204057) © 2026</p>
+        </footer>
+    </main>
+
+    <script>
+        // Trigger meter animation after page loads
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.getElementById('meterFill').style.width = '{{ "%.1f"|format(confidence * 100) }}%';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
