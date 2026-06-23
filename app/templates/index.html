@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Article Classifier — TASUED CIS</title>
+    <title>🤖 News Story Detective — What Type Is Your News?</title>
     <!-- Google Fonts & Material Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,6 +73,12 @@
         .app-bar-logo {
             color: var(--md-sys-color-primary);
             font-size: 28px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
         .nav-links {
@@ -118,6 +124,18 @@
             border-radius: var(--md-shape-corner-large);
             margin-bottom: 24px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            animation: slideInDown 0.5s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .welcome-card h2 {
@@ -141,6 +159,18 @@
             border: 1px solid var(--md-sys-color-surface-variant);
             position: relative;
             overflow: hidden;
+            animation: slideInUp 0.6s ease-out 0.2s both;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Linear Progress Bar (Material) */
@@ -287,6 +317,13 @@
             font-size: 13px;
             font-weight: 500;
             color: white;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .class-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
 
         .badge-politics { background-color: #1a56db; }
@@ -334,12 +371,12 @@
     <!-- App Bar -->
     <header class="app-bar">
         <div class="app-bar-title">
-            <span class="material-icons app-bar-logo">newspaper</span>
-            <span>News Article Classifier</span>
+            <span class="material-icons app-bar-logo">🤖</span>
+            <span>News Story Detective</span>
         </div>
         <nav class="nav-links">
-            <a href="/" class="nav-btn">Project Info</a>
-            <a href="/classifier" class="nav-btn active">Classifier</a>
+            <a href="/" class="nav-btn">📚 About This Project</a>
+            <a href="/classifier" class="nav-btn active">🔍 Try It Now</a>
         </nav>
     </header>
 
@@ -348,8 +385,8 @@
         
         <!-- Welcome Card -->
         <div class="welcome-card">
-            <h2>Welcome, Editor</h2>
-            <p>Paste any English-language news article below. The machine learning pipeline (powered by Calibrated Support Vector Machine) will predict the topical category and compute the model confidence score.</p>
+            <h2>🤖 What Kind of News Is This?</h2>
+            <p>Paste any news story below and our smart computer will tell you what type of news it is! Just like sorting your toys into different boxes, we sort news into categories.</p>
         </div>
 
         <!-- Form Card -->
@@ -369,44 +406,49 @@
 
             <form action="/classify" method="POST" onsubmit="return handleFormSubmit(this)">
                 <div class="form-group">
-                    <label for="article_text" class="form-label">Article Text</label>
+                    <label for="article_text" class="form-label">📰 Your News Story</label>
                     <textarea 
                         name="article_text" 
                         id="article_text" 
                         class="text-area" 
-                        placeholder="Paste news content here... (minimum 5 words recommended for accurate results)"
+                        placeholder="Copy and paste your news story here... (Write at least 5 words so our computer can do its best guess!)"
                         required
                     ></textarea>
                     <div class="textarea-counter">
-                        Characters: <span id="charCount">0</span> | Words: <span id="wordCount">0</span>
+                        Letters: <span id="charCount">0</span> | Words: <span id="wordCount">0</span>
                     </div>
                 </div>
                 
                 <button type="submit" class="btn-submit" id="btnSubmit">
-                    <span class="material-icons">analytics</span>
-                    <span>Classify Article</span>
+                    <span class="material-icons">psychology</span>
+                    <span>🔍 Find Out What Type!</span>
                 </button>
             </form>
 
             <!-- Supported Classes -->
             <div class="classes-legend">
-                <div class="legend-title">Supported Classification Categories</div>
+                <div class="legend-title">📋 Types of News We Can Spot</div>
                 <div class="badge-list">
                     <span class="class-badge badge-politics">
-                        <span class="material-icons" style="font-size: 14px;">gavel</span> Politics
+                        <span class="material-icons" style="font-size: 14px;">how_to_vote</span> Government & Politics
                     </span>
                     <span class="class-badge badge-sports">
-                        <span class="material-icons" style="font-size: 14px;">sports_soccer</span> Sports
+                        <span class="material-icons" style="font-size: 14px;">sports_soccer</span> Sports & Games
                     </span>
                     <span class="class-badge badge-technology">
-                        <span class="material-icons" style="font-size: 14px;">memory</span> Technology
+                        <span class="material-icons" style="font-size: 14px;">computer</span> Technology & Gadgets
                     </span>
                     <span class="class-badge badge-entertainment">
-                        <span class="material-icons" style="font-size: 14px;">theater_comedy</span> Entertainment
+                        <span class="material-icons" style="font-size: 14px;">movie</span> Movies & Music
                     </span>
                     <span class="class-badge badge-business">
-                        <span class="material-icons" style="font-size: 14px;">trending_up</span> Business
+                        <span class="material-icons" style="font-size: 14px;">store</span> Business & Money
                     </span>
+                </div>
+                
+                <!-- Help tip -->
+                <div style="margin-top: 16px; padding: 12px; background-color: var(--md-sys-color-surface-variant); border-radius: var(--md-shape-corner-medium); font-size: 13px; color: #5f6368;">
+                    💡 <strong>Helpful Tip:</strong> Our computer learns from patterns in words! Sometimes concert or entertainment news might get mixed up with sports because they use similar words like "stadium", "event", and "performance". That's totally normal - even humans sometimes disagree on categories!
                 </div>
             </div>
         </div>
@@ -447,7 +489,7 @@
             // Disable submit button
             const btn = document.getElementById('btnSubmit');
             btn.disabled = true;
-            btn.innerHTML = '<span class="material-icons" style="animation: spin 1s linear infinite;">sync</span> Processing...';
+            btn.innerHTML = '<span class="material-icons" style="animation: spin 1s linear infinite;">🤖</span> Our Computer Is Reading Your Story...';
             
             // Inject spinning style on the fly
             const style = document.createElement('style');

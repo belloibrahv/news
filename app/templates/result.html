@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Classification Result — News Article Classifier</title>
+    <title>🎉 Here's What We Found! — News Story Detective</title>
     <!-- Google Fonts & Material Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,6 +113,18 @@
             padding: 36px;
             box-shadow: 0 4px 24px rgba(0,0,0,0.06);
             border: 1px solid var(--md-sys-color-surface-variant);
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .card-header {
@@ -149,6 +161,25 @@
             font-weight: 600;
             color: white;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            animation: bounceIn 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         /* Confidence Score Panel */
@@ -292,12 +323,12 @@
     <!-- App Bar -->
     <header class="app-bar">
         <div class="app-bar-title">
-            <span class="material-icons app-bar-logo">newspaper</span>
-            <span>News Article Classifier</span>
+            <span class="material-icons app-bar-logo">🤖</span>
+            <span>News Story Detective</span>
         </div>
         <nav class="nav-links">
-            <a href="/" class="nav-btn">Project Info</a>
-            <a href="/classifier" class="nav-btn active">Classifier</a>
+            <a href="/" class="nav-btn">📚 About This Project</a>
+            <a href="/classifier" class="nav-btn active">🔍 Try It Now</a>
         </nav>
     </header>
 
@@ -307,32 +338,51 @@
         <!-- Result Card -->
         <div class="card">
             <div class="card-header">
-                <h2>Model Classification Result</h2>
+                <h2>🎯 Our Smart Computer's Best Guess</h2>
             </div>
 
             <!-- Predicted Category Badge -->
             <div class="result-badge-container">
                 <span class="result-badge" style="background-color: {{ badge_color }};">
                     <span class="material-icons" style="font-size: 32px;">
-                        {% if category == "Politics" %}gavel
+                        {% if category == "Politics" %}how_to_vote
                         {% elif category == "Sports" %}sports_soccer
-                        {% elif category == "Technology" %}memory
-                        {% elif category == "Entertainment" %}theater_comedy
-                        {% elif category == "Business" %}trending_up
+                        {% elif category == "Technology" %}computer
+                        {% elif category == "Entertainment" %}movie
+                        {% elif category == "Business" %}store
                         {% endif %}
                     </span>
-                    <span>{{ category }}</span>
+                    <span>
+                        {% if category == "Politics" %}Government & Politics
+                        {% elif category == "Sports" %}Sports & Games
+                        {% elif category == "Technology" %}Technology & Gadgets
+                        {% elif category == "Entertainment" %}Movies & Music
+                        {% elif category == "Business" %}Business & Money
+                        {% else %}{{ category }}
+                        {% endif %}
+                    </span>
                 </span>
             </div>
 
             <!-- Confidence Score Panel -->
             <div class="confidence-panel">
                 <div class="confidence-label-row">
-                    <span>Classification Confidence</span>
+                    <span>🎯 How Sure Are We?</span>
                     <span class="confidence-score">{{ "%.1f"|format(confidence * 100) }}%</span>
                 </div>
                 <div class="meter-container">
                     <div class="meter-fill" style="width: 0%; background-color: {{ badge_color }};" id="meterFill"></div>
+                </div>
+                <div style="margin-top: 8px; font-size: 13px; color: #70757a; text-align: center;">
+                    {% if confidence >= 0.8 %}
+                        😄 Super confident! We're pretty sure about this one.
+                    {% elif confidence >= 0.6 %}
+                        🙂 Pretty confident! This looks right to us.
+                    {% elif confidence >= 0.4 %}
+                        🤔 Not super sure... it could be this or maybe something else.
+                    {% else %}
+                        😅 Just our best guess! This story might fit in different categories.
+                    {% endif %}
                 </div>
             </div>
 
@@ -340,7 +390,7 @@
             <div class="preview-panel">
                 <div class="panel-title">
                     <span class="material-icons" style="font-size: 18px;">description</span>
-                    <span>Submitted Article Extract</span>
+                    <span>📖 Your News Story (First Part)</span>
                 </div>
                 <div class="preview-content">
                     "{{ article_preview }}"
@@ -350,8 +400,8 @@
             <!-- Actions -->
             <div class="action-row">
                 <a href="/classifier" class="btn btn-primary">
-                    <span class="material-icons">autorenew</span>
-                    <span>Classify Another Article</span>
+                    <span class="material-icons">refresh</span>
+                    <span>🔍 Try Another Story!</span>
                 </a>
             </div>
         </div>

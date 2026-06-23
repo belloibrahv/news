@@ -3,30 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Article Classification System — TASUED CIS</title>
+    <title>🤖 News Story Detective — AI-Powered News Classification</title>
     <!-- Google Fonts & Material Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     
     <style>
         :root {
-            --md-sys-color-primary: #0b57d0;
-            --md-sys-color-primary-container: #d3e3fd;
-            --md-sys-color-on-primary-container: #041e49;
-            --md-sys-color-surface: #ffffff;
-            --md-sys-color-surface-variant: #f1f3f4;
-            --md-sys-color-background: #f8f9fa;
-            --md-sys-color-on-background: #1f1f1f;
-            --md-sys-color-outline: #747775;
+            --primary-blue: #0b57d0;
+            --primary-blue-light: #d3e3fd;
+            --primary-blue-dark: #041e49;
+            --surface-white: #ffffff;
+            --surface-light: #f8f9fa;
+            --surface-variant: #f1f3f4;
+            --text-primary: #1f1f1f;
+            --text-secondary: #5f6368;
+            --text-muted: #70757a;
+            --outline: #e8eaed;
+            --success-green: #137333;
+            --warning-orange: #f29900;
             
-            --md-shape-corner-medium: 12px;
-            --md-shape-corner-large: 24px;
-            --md-shape-corner-full: 9999px;
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
             
-            --font-display: 'Outfit', sans-serif;
-            --font-body: 'Roboto', sans-serif;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+            
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
         }
 
         * {
@@ -36,593 +46,1120 @@
         }
 
         body {
-            font-family: var(--font-body);
-            background-color: var(--md-sys-color-background);
-            color: var(--md-sys-color-on-background);
+            font-family: var(--font-primary);
+            background-color: var(--surface-light);
+            color: var(--text-primary);
             line-height: 1.6;
-            padding-bottom: 60px;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* Header / App Bar */
-        .app-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 64px;
-            padding: 0 24px;
-            background-color: var(--md-sys-color-surface);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        /* Header */
+        .header {
             position: sticky;
             top: 0;
             z-index: 100;
+            background: var(--surface-white);
+            border-bottom: 1px solid var(--outline);
+            backdrop-filter: blur(12px);
         }
 
-        .app-bar-title {
-            font-family: var(--font-display);
-            font-size: 22px;
-            font-weight: 600;
-            color: #1f1f1f;
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
             align-items: center;
-            gap: 10px;
+        
+            justify-content: space-between;
+            padding: 16px 24px;
         }
 
-        .app-bar-logo {
-            color: var(--md-sys-color-primary);
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 20px;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
             font-size: 28px;
+            animation: gentle-pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes gentle-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .nav-links {
             display: flex;
-            gap: 16px;
+            gap: 8px;
         }
 
-        .nav-btn {
-            display: inline-flex;
+        .nav-link {
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            display: flex;
             align-items: center;
             gap: 6px;
-            padding: 8px 16px;
-            text-decoration: none;
-            color: #4a4a4a;
-            font-family: var(--font-display);
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: var(--md-shape-corner-full);
-            transition: background-color 0.2s;
         }
 
-        .nav-btn:hover {
-            background-color: var(--md-sys-color-surface-variant);
+        .nav-link:hover {
+            background-color: var(--surface-variant);
+            color: var(--text-primary);
         }
 
-        .nav-btn.active {
-            background-color: var(--md-sys-color-primary-container);
-            color: var(--md-sys-color-on-primary-container);
-        }
-
-        /* Container */
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 0 24px;
+        .nav-link.active {
+            background-color: var(--primary-blue-light);
+            color: var(--primary-blue-dark);
         }
 
         /* Hero Section */
         .hero {
-            text-align: center;
-            padding: 48px 24px;
-            background-color: var(--md-sys-color-surface);
-            border-radius: var(--md-shape-corner-large);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-            border: 1px solid var(--md-sys-color-surface-variant);
-            margin-bottom: 32px;
+            background: linear-gradient(135deg, var(--surface-white) 0%, var(--primary-blue-light) 100%);
+            position: relative;
+            overflow: hidden;
         }
 
-        .hero h1 {
-            font-family: var(--font-display);
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            color: #1f1f1f;
-            line-height: 1.2;
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(11, 87, 208, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(19, 115, 51, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(126, 58, 242, 0.1) 0%, transparent 50%);
+            animation: floating-orbs 15s ease-in-out infinite;
         }
 
-        .hero p {
-            font-size: 16px;
-            color: #5f6368;
-            max-width: 650px;
-            margin: 0 auto 28px auto;
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230b57d0' fill-opacity='0.03'%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3Ccircle cx='80' cy='80' r='1.5'/%3E%3Ccircle cx='50' cy='10' r='1'/%3E%3Ccircle cx='10' cy='70' r='1.5'/%3E%3Ccircle cx='90' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: particles-float 25s linear infinite;
         }
 
-        .btn-cta {
+        @keyframes floating-orbs {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            25% { transform: translate(30px, -20px) scale(1.1); }
+            50% { transform: translate(-20px, 30px) scale(0.9); }
+            75% { transform: translate(20px, 20px) scale(1.05); }
+        }
+
+        @keyframes particles-float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
+        }
+
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 24px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            animation: slide-up 0.8s ease-out;
+        }
+
+        @keyframes slide-up {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background-color: var(--md-sys-color-primary);
-            color: white;
-            padding: 16px 36px;
-            font-family: var(--font-display);
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: var(--md-shape-corner-full);
-            text-decoration: none;
-            box-shadow: 0 4px 12px rgba(11, 87, 208, 0.3);
-            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
-        }
-
-        .btn-cta:hover {
-            background-color: #0842a0;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(11, 87, 208, 0.4);
-        }
-
-        /* Section Layout */
-        .section-title {
-            font-family: var(--font-display);
-            font-size: 22px;
-            font-weight: 600;
-            margin: 40px 0 16px 0;
-            color: #1f1f1f;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-title .material-icons {
-            color: var(--md-sys-color-primary);
-        }
-
-        .grid-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        .info-card {
-            background-color: var(--md-sys-color-surface);
-            border-radius: var(--md-shape-corner-large);
-            padding: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-            border: 1px solid var(--md-sys-color-surface-variant);
-        }
-
-        .info-card h3 {
-            font-family: var(--font-display);
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #1f1f1f;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .meta-list {
-            list-style: none;
-        }
-
-        .meta-list li {
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 14.5px;
-            border-bottom: 1px dashed var(--md-sys-color-surface-variant);
-            padding-bottom: 6px;
-        }
-
-        .meta-label {
-            color: #5f6368;
+            background: var(--surface-white);
+            border: 1px solid var(--outline);
+            border-radius: var(--radius-full);
+            padding: 8px 16px;
+            font-size: 14px;
             font-weight: 500;
-        }
-
-        .meta-value {
-            font-weight: 600;
-            color: #1f1f1f;
-        }
-
-        /* Categories Section */
-        .categories-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-
-        .category-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 16px;
-            background-color: var(--md-sys-color-surface);
-            border-radius: var(--md-shape-corner-medium);
-            border: 1px solid var(--md-sys-color-surface-variant);
-            text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-        }
-
-        .category-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-
-        .category-name {
-            font-family: var(--font-display);
-            font-size: 15px;
-            font-weight: 600;
-            color: #1f1f1f;
-        }
-
-        /* Pipeline Steps Timeline */
-        .timeline {
-            position: relative;
-            padding-left: 32px;
-            margin-left: 16px;
-            border-left: 2px solid var(--md-sys-color-primary-container);
-            margin-bottom: 40px;
-        }
-
-        .timeline-item {
-            position: relative;
+            color: var(--text-secondary);
             margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
         }
 
-        .timeline-item:last-child {
-            margin-bottom: 0;
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: var(--text-primary);
         }
 
-        .timeline-dot {
-            position: absolute;
-            left: -41px;
-            top: 2px;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            background-color: var(--md-sys-color-surface);
-            border: 4px solid var(--md-sys-color-primary);
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.5;
         }
-
-        .timeline-header {
-            font-family: var(--font-display);
-            font-weight: 600;
-            font-size: 15px;
-            color: #1f1f1f;
-            margin-bottom: 4px;
-        }
-
-        .timeline-desc {
-            font-size: 13.5px;
-            color: #5f6368;
-        }
-
-        /* Empirical Metrics Dashboard */
-        .metrics-card {
-            background-color: var(--md-sys-color-surface);
-            border-radius: var(--md-shape-corner-large);
-            padding: 28px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-            border: 1px solid var(--md-sys-color-surface-variant);
-            margin-bottom: 40px;
-        }
-
-        .bar-chart-container {
+        .cta-group {
             display: flex;
-            flex-direction: column;
             gap: 16px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+            padding: 16px 32px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(11, 87, 208, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #0842a0;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(11, 87, 208, 0.4);
+        }
+
+        .btn-secondary {
+            color: var(--text-primary);
+            padding: 16px 24px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            color: var(--primary-blue);
+        }
+
+        .hero-visual {
+            position: relative;
+            animation: slide-up 0.8s ease-out 0.2s both;
+        }
+
+        .demo-card {
+            background: var(--surface-white);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            min-height: 200px;
+        }
+
+        .demo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--success-green), var(--warning-orange));
+            animation: gradient-shift 3s ease-in-out infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background: linear-gradient(90deg, var(--primary-blue), var(--success-green), var(--warning-orange)); }
+            50% { background: linear-gradient(90deg, var(--warning-orange), var(--primary-blue), var(--success-green)); }
+        }
+
+        .demo-carousel {
+            position: relative;
+            height: 160px;
+        }
+
+        .demo-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .demo-slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .demo-slide.exit {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+
+        .demo-input {
+            background: var(--surface-variant);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            font-family: var(--font-primary);
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            line-height: 1.5;
+            font-style: italic;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .demo-result {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            color: white;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            animation: result-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes result-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        .demo-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
             margin-top: 16px;
         }
 
-        .bar-row {
-            display: flex;
-            align-items: center;
-            font-size: 14px;
+        .demo-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .bar-label {
-            width: 140px;
-            font-family: var(--font-display);
-            font-weight: 500;
-            color: #1f1f1f;
+        .demo-indicator.active {
+            background: var(--primary-blue);
+            transform: scale(1.2);
         }
 
-        .bar-track {
-            flex: 1;
-            height: 24px;
-            background-color: var(--md-sys-color-surface-variant);
-            border-radius: var(--md-shape-corner-full);
+        .typing-animation {
             overflow: hidden;
-            position: relative;
+            white-space: nowrap;
+            animation: typewriter 3s steps(60) 1s both;
         }
 
-        .bar-fill {
-            height: 100%;
-            border-radius: var(--md-shape-corner-full);
-            background-color: var(--md-sys-color-primary);
-            transition: width 1s ease-out;
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* Stats Section */
+        .stats {
+            background: var(--surface-white);
+            padding: 60px 0;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 24px;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            display: block;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: var(--surface-light);
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: var(--surface-white);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s ease;
+            border: 1px solid var(--outline);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            padding-right: 12px;
+            justify-content: center;
+            font-size: 24px;
             color: white;
+            margin-bottom: 20px;
+        }
+        .feature-title {
+            font-size: 20px;
             font-weight: 600;
-            font-size: 12px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
         }
 
-        .bar-fill.rf { background-color: #689f38; }
-        .bar-fill.nb { background-color: #ff8f00; }
-        .bar-fill.lr { background-color: #00acc1; }
+        .feature-desc {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Categories Section */
+        .categories {
+            padding: 80px 0;
+            background: var(--surface-white);
+        }
+
+        .categories-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+        }
+
+        .category-card {
+            background: var(--surface-light);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-blue);
+        }
+
+        .category-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            color: white;
+            margin: 0 auto 16px;
+        }
+
+        .category-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0842a0 100%);
+            padding: 80px 0;
+            color: white;
+            text-align: center;
+        }
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .cta-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .cta-subtitle {
+            font-size: 18px;
+            margin-bottom: 32px;
+            opacity: 0.9;
+        }
+
+        .btn-white {
+            background: var(--surface-white);
+            color: var(--primary-blue);
+            padding: 16px 32px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-white:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+        }
 
         /* Footer */
-        .footer-info {
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 40px 0;
             text-align: center;
-            font-size: 12px;
-            color: #70757a;
-            margin-top: 40px;
-            border-top: 1px solid var(--md-sys-color-surface-variant);
-            padding-top: 24px;
         }
 
-        /* Responsive styling */
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            text-align: left;
+            margin-bottom: 32px;
+        }
+
+        .footer-section h4 {
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-section p,
+        .footer-section li {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 24px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .grid-info {
+            .hero-container {
                 grid-template-columns: 1fr;
+                gap: 40px;
+                padding: 60px 24px;
+                text-align: center;
             }
-            .hero h1 {
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 24px;
+            }
+
+            .section-title {
                 font-size: 28px;
             }
-            .container {
-                margin: 20px auto;
+
+            .nav-container {
+                padding: 12px 16px;
+            }
+
+            .nav-links {
+                gap: 4px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 24px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- App Bar -->
-    <header class="app-bar">
-        <div class="app-bar-title">
-            <span class="material-icons app-bar-logo">newspaper</span>
-            <span>News Article Classifier</span>
-        </div>
-        <nav class="nav-links">
-            <a href="/" class="nav-btn active">Project Info</a>
-            <a href="/classifier" class="nav-btn">Classifier</a>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">🤖</span>
+                <span>News Story Detective</span>
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link active">
+                    <span class="material-icons" style="font-size: 18px;">home</span>
+                    <span>Home</span>
+                </a>
+                <a href="/classifier" class="nav-link">
+                    <span class="material-icons" style="font-size: 18px;">psychology</span>
+                    <span>Try Now</span>
+                </a>
+            </div>
         </nav>
     </header>
 
-    <!-- Main Container -->
-    <main class="container">
-        
-        <!-- Hero Section -->
-        <section class="hero">
-            <h1>News Article Classification System</h1>
-            <p>An automated Machine Learning and Natural Language Processing (NLP) system designed to accurately categorize news articles across five topical segments.</p>
-            <a href="/classifier" class="btn-cta">
-                <span>Start Article Classifier</span>
-                <span class="material-icons">arrow_forward</span>
-            </a>
-        </section>
-
-        <!-- Project & Institution Meta -->
-        <div class="grid-info">
-            <!-- Academic Information -->
-            <div class="info-card">
-                <h3>
-                    <span class="material-icons">school</span>
-                    <span>Academic Context</span>
-                </h3>
-                <ul class="meta-list">
-                    <li>
-                        <span class="meta-label">Institution</span>
-                        <span class="meta-value">TASUED</span>
-                    </li>
-                    <li>
-                        <span class="meta-label">Department</span>
-                        <span class="meta-value">Computer & Info. Science</span>
-                    </li>
-                    <li>
-                        <span class="meta-label">Author</span>
-                        <span class="meta-value">Otasanya Jamiu Olamilekan</span>
-                    </li>
-                    <li>
-                        <span class="meta-label">Matric No.</span>
-                        <span class="meta-value">20220204057</span>
-                    </li>
-                    <li>
-                        <span class="meta-label">Supervisor</span>
-                        <span class="meta-value">Dr. G.O. Odulaja</span>
-                    </li>
-                    <li>
-                        <span class="meta-label">Academic Year</span>
-                        <span class="meta-value">2026</span>
-                    </li>
-                </ul>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="material-icons" style="font-size: 16px;">auto_awesome</span>
+                    <span>Powered by Advanced Machine Learning</span>
+                </div>
+                <h1 class="hero-title">
+                    Instantly Classify Any News Story with AI
+                </h1>
+                <p class="hero-subtitle">
+                    Our smart computer reads your news articles and tells you exactly what type they are. Just paste, click, and discover!
+                </p>
+                <div class="cta-group">
+                    <a href="/classifier" class="btn-primary">
+                        <span class="material-icons" style="font-size: 20px;">rocket_launch</span>
+                        <span>Try It Now</span>
+                    </a>
+                    <a href="#how-it-works" class="btn-secondary">
+                        <span>See How It Works</span>
+                        <span class="material-icons" style="font-size: 18px;">arrow_downward</span>
+                    </a>
+                </div>
             </div>
+            <div class="hero-visual">
+                <div class="demo-card">
+                    <div class="demo-carousel" id="newsCarousel">
+                        <!-- Slide 1: Entertainment -->
+                        <div class="demo-slide active" data-category="entertainment">
+                            <div class="demo-input">
+                                <div class="typing-animation">
+                                "Taylor Swift announces new album 'Midnight Dreams' with 16 tracks, set for release this December. The pop superstar revealed the news during her Eras Tour concert..."
+                                </div>
+                            </div>
+                            <div class="demo-result" style="background: #d97706;">
+                                <span class="material-icons">movie</span>
+                                <span>Entertainment & Music</span>
+                                <span style="margin-left: auto; font-size: 14px;">94% confident</span>
+                            </div>
+                        </div>
 
-            <!-- Pipeline Parameters -->
-            <div class="info-card">
-                <h3>
-                    <span class="meta-label">
-                        <span class="material-icons">settings</span>
-                    </span>
-                    <span>Pipeline Parameters</span>
-                </h3>
-                <ul class="meta-list">
-                    <li>
-                        <span class="meta-label">Language Scope</span>
-                        <span class="meta-value">English</span>
-                    </li>
-                    <li>
-                        <span class="meta-label">Feature Extractor</span>
-                        <span class="meta-value">TF-IDF Vectorizer</span>
-                    </li>
-                    <li>
-                        <span class="meta-label">Vocabulary Size</span>
-                        <span class="meta-value">50,000 features</span>
-                    </li>
-                    <li>
-                        <span class="meta-label">N-gram Range</span>
-                        <span class="meta-value">Unigrams & Bigrams (1,2)</span>
-                    </li>
-                    <li>
-                        <span class="meta-label">Dataset Balanced Size</span>
-                        <span class="meta-value">7,500 articles</span>
-                    </li>
-                    <li>
-                        <span class="meta-label">Split Configuration</span>
-                        <span class="meta-value">70% Train / 15% Val / 15% Test</span>
-                    </li>
-                </ul>
+                        <!-- Slide 2: Technology -->
+                        <div class="demo-slide" data-category="technology">
+                            <div class="demo-input">
+                                <div class="typing-animation">
+                                "OpenAI releases GPT-5 with revolutionary reasoning capabilities, demonstrating breakthrough performance in scientific research and complex problem-solving tasks..."
+                                </div>
+                            </div>
+                            <div class="demo-result" style="background: #7e3af2;">
+                                <span class="material-icons">computer</span>
+                                <span>Technology & AI</span>
+                                <span style="margin-left: auto; font-size: 14px;">98% confident</span>
+                            </div>
+                        </div>
+
+                        <!-- Slide 3: Sports -->
+                        <div class="demo-slide" data-category="sports">
+                            <div class="demo-input">
+                                <div class="typing-animation">
+                                "Manchester United defeats Barcelona 3-1 in Champions League final, with spectacular goals from their star striker securing the historic victory at Wembley Stadium..."
+                                </div>
+                            </div>
+                            <div class="demo-result" style="background: #057a55;">
+                                <span class="material-icons">sports_soccer</span>
+                                <span>Sports & Games</span>
+                                <span style="margin-left: auto; font-size: 14px;">89% confident</span>
+                            </div>
+                        </div>
+
+                        <!-- Slide 4: Politics -->
+                        <div class="demo-slide" data-category="politics">
+                            <div class="demo-input">
+                                <div class="typing-animation">
+                                "Congress passes landmark climate legislation with bipartisan support, allocating $500 billion for renewable energy infrastructure and carbon reduction initiatives..."
+                                </div>
+                            </div>
+                            <div class="demo-result" style="background: #1a56db;">
+                                <span class="material-icons">how_to_vote</span>
+                                <span>Government & Politics</span>
+                                <span style="margin-left: auto; font-size: 14px;">91% confident</span>
+                            </div>
+                        </div>
+
+                        <!-- Slide 5: Business -->
+                        <div class="demo-slide" data-category="business">
+                            <div class="demo-input">
+                                <div class="typing-animation">
+                                "Tesla stock soars 15% following record quarterly earnings report, with electric vehicle sales exceeding analyst expectations for the fourth consecutive quarter..."
+                                </div>
+                            </div>
+                            <div class="demo-result" style="background: #e02424;">
+                                <span class="material-icons">trending_up</span>
+                                <span>Business & Money</span>
+                                <span style="margin-left: auto; font-size: 14px;">87% confident</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Carousel Indicators -->
+                    <div class="demo-indicators">
+                        <div class="demo-indicator active" data-slide="0"></div>
+                        <div class="demo-indicator" data-slide="1"></div>
+                        <div class="demo-indicator" data-slide="2"></div>
+                        <div class="demo-indicator" data-slide="3"></div>
+                        <div class="demo-indicator" data-slide="4"></div>
+                    </div>
+                </div>
             </div>
         </div>
+    </section>
 
-        <!-- Supported Categories -->
-        <h2 class="section-title">
-            <span class="material-icons">category</span>
-            <span>Classification Categories</span>
-        </h2>
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">92.8%</span>
+                    <div class="stat-label">Accuracy Rate</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">7,500</span>
+                    <div class="stat-label">Training Articles</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">5</span>
+                    <div class="stat-label">News Categories</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50K</span>
+                    <div class="stat-label">Vocabulary Features</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="how-it-works">
+        <div class="features-container">
+            <div class="section-header">
+                <h2 class="section-title">How Our AI Detective Works</h2>
+                <p class="section-subtitle">
+                    Simple, fast, and accurate news classification powered by advanced machine learning technology
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: var(--primary-blue);">
+                        <span class="material-icons">content_paste</span>
+                    </div>
+                    <h3 class="feature-title">Paste Your Story</h3>
+                    <p class="feature-desc">
+                        Simply copy and paste any English news article into our smart text box. No sign-ups or complicated forms needed.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: var(--success-green);">
+                        <span class="material-icons">auto_awesome</span>
+                    </div>
+                    <h3 class="feature-title">AI Analyzes</h3>
+                    <p class="feature-desc">
+                        Our trained AI reads every word, understanding patterns and context to determine the story's category with high accuracy.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon" style="background: var(--warning-orange);">
+                        <span class="material-icons">visibility</span>
+                    </div>
+                    <h3 class="feature-title">Get Results</h3>
+                    <p class="feature-desc">
+                        Receive instant classification results with confidence scores, helping you organize and understand your news content.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories">
         <div class="categories-container">
-            <div class="category-item">
-                <div class="category-icon" style="background-color: #1a56db;">
-                    <span class="material-icons">gavel</span>
-                </div>
-                <span class="category-name">Politics</span>
+            <div class="section-header">
+                <h2 class="section-title">News Categories We Detect</h2>
+                <p class="section-subtitle">
+                    Our AI can identify and classify news articles into these five main categories
+                </p>
             </div>
-            <div class="category-item">
-                <div class="category-icon" style="background-color: #057a55;">
-                    <span class="material-icons">sports_soccer</span>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon" style="background: #1a56db;">
+                        <span class="material-icons">how_to_vote</span>
+                    </div>
+                    <div class="category-name">Government & Politics</div>
                 </div>
-                <span class="category-name">Sports</span>
-            </div>
-            <div class="category-item">
-                <div class="category-icon" style="background-color: #7e3af2;">
-                    <span class="material-icons">memory</span>
+                <div class="category-card">
+                    <div class="category-icon" style="background: #057a55;">
+                        <span class="material-icons">sports_soccer</span>
+                    </div>
+                    <div class="category-name">Sports & Games</div>
                 </div>
-                <span class="category-name">Technology</span>
-            </div>
-            <div class="category-item">
-                <div class="category-icon" style="background-color: #d97706;">
-                    <span class="material-icons">theater_comedy</span>
+                <div class="category-card">
+                    <div class="category-icon" style="background: #7e3af2;">
+                        <span class="material-icons">computer</span>
+                    </div>
+                    <div class="category-name">Technology & Gadgets</div>
                 </div>
-                <span class="category-name">Entertainment</span>
-            </div>
-            <div class="category-item">
-                <div class="category-icon" style="background-color: #e02424;">
-                    <span class="material-icons">trending_up</span>
+                <div class="category-card">
+                    <div class="category-icon" style="background: #d97706;">
+                        <span class="material-icons">movie</span>
+                    </div>
+                    <div class="category-name">Movies & Music</div>
                 </div>
-                <span class="category-name">Business</span>
+                <div class="category-card">
+                    <div class="category-icon" style="background: #e02424;">
+                        <span class="material-icons">store</span>
+                    </div>
+                    <div class="category-name">Business & Money</div>
+                </div>
             </div>
         </div>
+    </section>
 
-        <!-- Preprocessing Timeline -->
-        <h2 class="section-title">
-            <span class="material-icons">alt_route</span>
-            <span>7-Step Text Preprocessing Pipeline</span>
-        </h2>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-header">Step 1: Lowercase Conversion</div>
-                <div class="timeline-desc">Standardizes text format by casting all letters to lowercase.</div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-header">Step 2: URL Removal</div>
-                <div class="timeline-desc">Cleans web link fragments using regular expression matching.</div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-header">Step 3: HTML Tag Removal</div>
-                <div class="timeline-desc">Strips out any markup parameters (`<.*?>`) to isolate plain text content.</div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-header">Step 4: Non-alphabetic Characters Filtering</div>
-                <div class="timeline-desc">Removes digits, special characters, and punctuation marks.</div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-header">Step 5: Tokenization</div>
-                <div class="timeline-desc">Partitions full text strings into lists of individual word tokens.</div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-header">Step 6: Stopword Removal</div>
-                <div class="timeline-desc">Filters out common semantic connectors (e.g., "the", "is", "at") using the NLTK English stopword list.</div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-header">Step 7: Porter Stemming</div>
-                <div class="timeline-desc">Reduces tokens to their root stems (e.g., "running" and "runs" converge to "run").</div>
-            </div>
-        </div>
-
-        <!-- Empirical Model Performance Metrics -->
-        <h2 class="section-title">
-            <span class="material-icons">bar_chart</span>
-            <span>Empirical Test Accuracy Benchmarks</span>
-        </h2>
-        <div class="metrics-card">
-            <p style="font-size: 14.5px; color: #5f6368; margin-bottom: 20px;">
-                Trained and evaluated four classical classifiers on identical stratified test divisions (N = 1,125). 
-                The Calibrated SVM model achieved the highest score and is deployed for prototype inference.
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-container">
+            <h2 class="cta-title">Ready to Try It Yourself?</h2>
+            <p class="cta-subtitle">
+                Experience the power of AI-driven news classification. It's free, fast, and surprisingly accurate!
             </p>
-            <div class="bar-chart-container">
-                <!-- SVM -->
-                <div class="bar-row">
-                    <span class="bar-label">SVM (LinearSVC)</span>
-                    <div class="bar-track">
-                        <div class="bar-fill" style="width: 0%;" id="svmFill">92.8%</div>
-                    </div>
+            <a href="/classifier" class="btn-white">
+                <span class="material-icons" style="font-size: 20px;">smart_toy</span>
+                <span>Start Classifying News</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Academic Project</h4>
+                    <p>TASUED Department of Computer & Information Science</p>
+                    <p>Student: Otasanya Jamiu Olamilekan</p>
+                    <p>Matric No: 20220204057</p>
+                    <p>Supervisor: Dr. G.O. Odulaja</p>
                 </div>
-                <!-- Logistic Regression -->
-                <div class="bar-row">
-                    <span class="bar-label">Logistic Regression</span>
-                    <div class="bar-track">
-                        <div class="bar-fill lr" style="width: 0%;" id="lrFill">92.4%</div>
-                    </div>
-                </div>
-                <!-- Naive Bayes -->
-                <div class="bar-row">
-                    <span class="bar-label">Naive Bayes</span>
-                    <div class="bar-track">
-                        <div class="bar-fill nb" style="width: 0%;" id="nbFill">92.4%</div>
-                    </div>
-                </div>
-                <!-- Random Forest -->
-                <div class="bar-row">
-                    <span class="bar-label">Random Forest</span>
-                    <div class="bar-track">
-                        <div class="bar-fill rf" style="width: 0%;" id="rfFill">89.2%</div>
-                    </div>
+                <div class="footer-section">
+                    <h4>Technical Details</h4>
+                    <ul>
+                        <li>Algorithm: Support Vector Machine (SVM)</li>
+                        <li>Features: TF-IDF Vectorization</li>
+                        <li>Accuracy: 92.8% on test data</li>
+                        <li>Training Set: 7,500 balanced articles</li>
+                        <li>Preprocessing: 7-step NLP pipeline</li>
+                    </ul>
                 </div>
             </div>
+            <div class="footer-bottom">
+                © 2026 News Story Detective. Academic Research Project.
+            </div>
         </div>
-
-        <!-- Footer -->
-        <footer class="footer-info">
-            <p>TASUED Department of Computer and Information Science</p>
-            <p>Otasanya Jamiu Olamilekan (Matric No: 20220204057) © 2026</p>
-        </footer>
-    </main>
+    </footer>
 
     <script>
-        // Animate metrics bar chart fills
-        window.addEventListener('DOMContentLoaded', () => {
+        // News Carousel Functionality
+        class NewsCarousel {
+            constructor() {
+                this.currentSlide = 0;
+                this.slides = document.querySelectorAll('.demo-slide');
+                this.indicators = document.querySelectorAll('.demo-indicator');
+                this.totalSlides = this.slides.length;
+                this.autoRotateInterval = null;
+                this.isTransitioning = false;
+                
+                this.init();
+            }
+            
+            init() {
+                // Add click handlers for indicators
+                this.indicators.forEach((indicator, index) => {
+                    indicator.addEventListener('click', () => {
+                        if (!this.isTransitioning) {
+                            this.goToSlide(index);
+                        }
+                    });
+                });
+                
+                // Start auto-rotation
+                this.startAutoRotate();
+                
+                // Pause on hover, resume on mouse leave
+                const carousel = document.getElementById('newsCarousel');
+                carousel.addEventListener('mouseenter', () => this.pauseAutoRotate());
+                carousel.addEventListener('mouseleave', () => this.startAutoRotate());
+            }
+            
+            goToSlide(slideIndex) {
+                if (this.isTransitioning || slideIndex === this.currentSlide) return;
+                
+                this.isTransitioning = true;
+                
+                // Remove active class from current slide and indicator
+                this.slides[this.currentSlide].classList.remove('active');
+                this.slides[this.currentSlide].classList.add('exit');
+                this.indicators[this.currentSlide].classList.remove('active');
+                
+                // Update current slide index
+                this.currentSlide = slideIndex;
+                
+                // Add active class to new slide and indicator
+                setTimeout(() => {
+                    // Remove exit class from all slides
+                    this.slides.forEach(slide => slide.classList.remove('exit'));
+                    
+                    // Activate new slide
+                    this.slides[this.currentSlide].classList.add('active');
+                    this.indicators[this.currentSlide].classList.add('active');
+                    
+                    // Reset typing animation
+                    this.resetTypingAnimation();
+                    
+                    this.isTransitioning = false;
+                }, 400);
+            }
+            
+            nextSlide() {
+                const nextIndex = (this.currentSlide + 1) % this.totalSlides;
+                this.goToSlide(nextIndex);
+            }
+            
+            resetTypingAnimation() {
+                const currentSlideElement = this.slides[this.currentSlide];
+                const typingElement = currentSlideElement.querySelector('.typing-animation');
+                
+                if (typingElement) {
+                    // Reset animation by removing and re-adding class
+                    typingElement.style.animation = 'none';
+                    typingElement.offsetHeight; // Trigger reflow
+                    typingElement.style.animation = 'typewriter 3s steps(60) 0.5s both';
+                }
+            }
+            
+            startAutoRotate() {
+                this.pauseAutoRotate(); // Clear any existing interval
+                this.autoRotateInterval = setInterval(() => {
+                    this.nextSlide();
+                }, 4000); // Change slide every 4 seconds
+            }
+            
+            pauseAutoRotate() {
+                if (this.autoRotateInterval) {
+                    clearInterval(this.autoRotateInterval);
+                    this.autoRotateInterval = null;
+                }
+            }
+        }
+        
+        // Enhanced Background Animations
+        function createFloatingParticles() {
+            const hero = document.querySelector('.hero');
+            
+            // Create additional floating particles
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 6 + 2}px;
+                    height: ${Math.random() * 6 + 2}px;
+                    background: rgba(11, 87, 208, 0.1);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    animation: particle-float-${i} ${15 + Math.random() * 10}s ease-in-out infinite;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                `;
+                
+                // Create unique animation for each particle
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes particle-float-${i} {
+                        0%, 100% { 
+                            transform: translate(0px, 0px) scale(1);
+                            opacity: 0.3;
+                        }
+                        25% { 
+                            transform: translate(${30 + Math.random() * 40}px, ${-20 - Math.random() * 30}px) scale(1.2);
+                            opacity: 0.6;
+                        }
+                        50% { 
+                            transform: translate(${-20 - Math.random() * 40}px, ${30 + Math.random() * 40}px) scale(0.8);
+                            opacity: 0.4;
+                        }
+                        75% { 
+                            transform: translate(${20 + Math.random() * 30}px, ${20 + Math.random() * 30}px) scale(1.1);
+                            opacity: 0.5;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+                hero.appendChild(particle);
+            }
+        }
+        
+        // Smooth scroll for anchor links
+        function initSmoothScroll() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+        
+        // Intersection Observer for animations
+        function initScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'slide-up 0.8s ease-out forwards';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe elements for animation
+            document.querySelectorAll('.feature-card, .category-card, .stat-item').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                observer.observe(el);
+            });
+        }
+        
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize carousel
+            new NewsCarousel();
+            
+            // Initialize other enhancements
+            createFloatingParticles();
+            initSmoothScroll();
+            initScrollAnimations();
+            
+            // Add loading animation completion
+            document.body.style.opacity = '0';
             setTimeout(() => {
-                document.getElementById('svmFill').style.width = '92.8%';
-                document.getElementById('lrFill').style.width = '92.4%';
-                document.getElementById('nbFill').style.width = '92.4%';
-                document.getElementById('rfFill').style.width = '89.2%';
+                document.body.style.transition = 'opacity 0.5s ease-in-out';
+                document.body.style.opacity = '1';
             }, 100);
         });
+        
+        // Performance optimization: Reduce animations on slower devices
+        if (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4) {
+            document.documentElement.style.setProperty('--animation-duration', '2s');
+        }
     </script>
+
 </body>
 </html>

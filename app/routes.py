@@ -34,7 +34,7 @@ def classify():
         # Empty input: return HTTP 400 and render index with error
         return render_template(
             "index.html", 
-            error="Please paste an article before classifying."
+            error="🤔 Oops! Please copy and paste your news story in the box above before clicking the button."
         ), 400
         
     try:
@@ -62,12 +62,12 @@ def classify():
         
     except ValueError as val_err:
         # Gracefully handle other validation issues (e.g. no valid words after preprocessing)
-        return render_template("index.html", error=str(val_err)), 400
+        return render_template("index.html", error=f"😅 Sorry! Your story needs more real words for our computer to understand it. Try adding more details!"), 400
         
     except Exception as e:
         # FR-W10 / NFR-S02: Display neat internal server error without exposing internals
         app.logger.error(f"Error classifying article: {str(e)}")
-        return render_template("error.html", message="Classification service is unavailable. Please contact the administrator."), 500
+        return render_template("error.html", message="🤖 Oops! Our computer is taking a break. Please try again in a moment or contact the administrator."), 500
 
 @main_bp.route("/health", methods=["GET"])
 def health():

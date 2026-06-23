@@ -1,0 +1,10 @@
+{
+  "dataset_info": {
+    "total_articles": 75000,
+    "train_size": 52500,
+    "validation_size": 11250,
+    "test_size": 11250,
+    "creation_date": "2026-06-23T04:02:27.934198"
+  },
+  "category_distribution": {
+    "SPORTS": 

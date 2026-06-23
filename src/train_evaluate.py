@@ -159,9 +159,12 @@ def run_pipeline():
     best_clf = joblib.load(best_clf_path)
     
     y_test_pred_best = best_clf.predict(X_test_vec)
-    cm = confusion_matrix(y_test, y_test_pred_best, labels=config.CATEGORIES)
     
-    df_cm = pd.DataFrame(cm, index=config.CATEGORIES, columns=config.CATEGORIES)
+    # Use actual labels from the test set instead of predefined categories
+    actual_labels = sorted(y_test.unique())
+    cm = confusion_matrix(y_test, y_test_pred_best, labels=actual_labels)
+    
+    df_cm = pd.DataFrame(cm, index=actual_labels, columns=actual_labels)
     df_cm.to_csv(config.CONFUSION_MATRIX_CSV)
     
     print("\nConfusion Matrix for SVM (LinearSVC):")
