@@ -50,8 +50,9 @@
         .app-bar {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             height: 64px;
-            padding: 0 16px;
+            padding: 0 24px;
             background-color: var(--md-sys-color-surface);
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
             position: sticky;
@@ -62,17 +63,44 @@
         .app-bar-title {
             font-family: var(--font-display);
             font-size: 22px;
-            font-weight: 500;
-            margin-left: 12px;
+            font-weight: 600;
             color: #1f1f1f;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
 
         .app-bar-logo {
             color: var(--md-sys-color-primary);
             font-size: 28px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #4a4a4a;
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--md-shape-corner-full);
+            transition: background-color 0.2s;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--md-sys-color-surface-variant);
+        }
+
+        .nav-btn.active {
+            background-color: var(--md-sys-color-primary-container);
+            color: var(--md-sys-color-on-primary-container);
         }
 
         /* Container */
@@ -267,6 +295,14 @@
         .badge-entertainment { background-color: #d97706; }
         .badge-business { background-color: #e02424; }
 
+        .textarea-counter {
+            text-align: right;
+            font-size: 13px;
+            color: #70757a;
+            margin-top: 6px;
+            font-family: var(--font-body);
+        }
+
         /* Footer Info */
         .footer-info {
             text-align: center;
@@ -301,6 +337,10 @@
             <span class="material-icons app-bar-logo">newspaper</span>
             <span>News Article Classifier</span>
         </div>
+        <nav class="nav-links">
+            <a href="/" class="nav-btn">Project Info</a>
+            <a href="/classifier" class="nav-btn active">Classifier</a>
+        </nav>
     </header>
 
     <!-- Main Container -->
@@ -337,6 +377,9 @@
                         placeholder="Paste news content here... (minimum 5 words recommended for accurate results)"
                         required
                     ></textarea>
+                    <div class="textarea-counter">
+                        Characters: <span id="charCount">0</span> | Words: <span id="wordCount">0</span>
+                    </div>
                 </div>
                 
                 <button type="submit" class="btn-submit" id="btnSubmit">
@@ -376,9 +419,24 @@
     </main>
 
     <script>
+        const textArea = document.getElementById('article_text');
+        const charCount = document.getElementById('charCount');
+        const wordCount = document.getElementById('wordCount');
+
+        function updateCounter() {
+            const text = textArea.value;
+            charCount.textContent = text.length;
+            
+            // Filter out empty spaces to count words accurately
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+            wordCount.textContent = words.length;
+        }
+
+        textArea.addEventListener('input', updateCounter);
+        textArea.addEventListener('keyup', updateCounter);
+
         function handleFormSubmit(form) {
             // Check validation
-            const textArea = document.getElementById('article_text');
             if (!textArea.value.trim()) {
                 return false;
             }

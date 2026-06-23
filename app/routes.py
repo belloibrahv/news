@@ -12,6 +12,11 @@ import predictor
 main_bp = Blueprint("main", __name__)
 
 @main_bp.route("/", methods=["GET"])
+def home():
+    """Renders the project landing page."""
+    return render_template("home.html")
+
+@main_bp.route("/classifier", methods=["GET"])
 def index():
     """Renders the article submission page."""
     return render_template("index.html", error=None)
