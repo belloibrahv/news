@@ -108,6 +108,35 @@ chmod +x run_ci.sh
 
 ---
 
+## Production Deployment Guide
+
+### Option A: Deploying on Render (Recommended & Free Tier)
+Render supports building directly from your `Dockerfile`:
+1. Log in to [Render](https://render.com) and connect your GitHub account.
+2. Click **New +** and select **Web Service**.
+3. Choose the `belloibrahv/news` repository.
+4. Configure the service settings:
+   - **Environment**: `Docker` (Render automatically detects the `Dockerfile`)
+   - **Branch**: `main`
+   - **Region**: Choose the closest region
+   - **Instance Type**: `Free`
+5. Click **Deploy Web Service**. Render will build the container image, run the training pipeline automatically at build time, and deploy your Flask app.
+
+### Option B: Deploying to Google Cloud Run (Serverless Container)
+You can deploy your containerized app on Google Cloud:
+1. Ensure the Google Cloud SDK (`gcloud`) is authenticated on your local machine.
+2. Build and submit your container image to Google Artifact Registry:
+   ```bash
+   gcloud builds submit --tag gcr.io/[PROJECT_ID]/news-classifier
+   ```
+3. Deploy the container image to Cloud Run:
+   ```bash
+   gcloud run deploy news-classifier --image gcr.io/[PROJECT_ID]/news-classifier --platform managed --allow-unauthenticated
+   ```
+4. Copy the service URL provided at the end of the deployment.
+
+---
+
 ## Model Evaluation Summary
 All models are evaluated on a stratified test set (15% held-out). Performance results:
 
