@@ -1,0 +1,54 @@
+name: News Classifier CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+
+    - name: Install System Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Download NLTK Corpora
+      run: |
+        python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('punkt_tab')"
+
+    - name: Generate Dataset (Pre-train)
+      run: |
+        python src/generate_dataset.py
+
+    - name: Train and Evaluate ML Models
+      run: |
+        python src/train_evaluate.py
+
+    - name: Run Unit Tests
+      run: |
+        python -m unittest src/test_suite.py
+
+    - name: Run Functional System Tests
+      run: |
+        python src/system_test.py
+
+    - name: Simulated Deployment
+      if: success()
+      run: |
+        echo "=========================================================================="
+        echo "CI/CD BUILD & TEST PIPELINE PASSED SUCCESSFULLY"
+        echo "Code is validated and ready for production deployment."
+        echo "=========================================================================="
