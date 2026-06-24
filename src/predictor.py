@@ -67,6 +67,6 @@ def predict_category(text: str) -> dict:
     confidence = probabilities[class_index]
     
     return {
-        "category": str(predicted_label),
+        "category": str(predicted_label).title(),
         "confidence": float(confidence)
     }

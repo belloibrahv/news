@@ -79,7 +79,7 @@ def verify_models():
         classification_works = (
             'category' in result and 
             'confidence' in result and
-            result['category'] in ['POLITICS', 'SPORTS', 'TECHNOLOGY', 'ENTERTAINMENT', 'BUSINESS']
+            result['category'].upper() in ['POLITICS', 'SPORTS', 'TECHNOLOGY', 'ENTERTAINMENT', 'BUSINESS']
         )
         
         print(f"   Classification Function: {'✅' if classification_works else '❌'}")
@@ -104,7 +104,7 @@ def verify_davido_fix():
         category = result['category']
         confidence = result['confidence']
         
-        is_fixed = category == 'ENTERTAINMENT'
+        is_fixed = category.upper() == 'ENTERTAINMENT'
         high_confidence = confidence > 0.8
         
         print(f"   Predicted Category: {category}")

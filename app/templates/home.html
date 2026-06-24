@@ -671,6 +671,338 @@
                 gap: 24px;
             }
         }
+
+        /* Project Details Slider Section */
+        .project-details-section {
+            padding: 80px 0;
+            background: var(--surface-white);
+            border-bottom: 1px solid var(--outline);
+            overflow: hidden;
+        }
+
+        .slider-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+        }
+
+        .project-slider {
+            position: relative;
+            height: 480px;
+            border-radius: var(--radius-xl);
+            background: linear-gradient(135deg, var(--surface-light) 0%, var(--primary-blue-light) 100%);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            border: 1px solid var(--outline);
+        }
+
+        .slide-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .project-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 40px;
+            padding: 48px;
+            align-items: center;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(50px);
+        }
+
+        .project-slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .project-slide.exit {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-50px);
+        }
+
+        .slide-text {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .slide-label {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slide-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .slide-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .slide-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .slide-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .slide-list li span.icon {
+            font-size: 20px;
+            color: var(--primary-blue);
+        }
+
+        .slide-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            position: relative;
+        }
+
+        .visual-box {
+            background: var(--surface-white);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 360px;
+            border: 1px solid var(--outline);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+        }
+
+        .visual-box:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Slider Controls */
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--surface-white);
+            border: 1px solid var(--outline);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+            z-index: 10;
+            transition: all 0.2s ease;
+        }
+
+        .slider-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+            box-shadow: 0 4px 12px rgba(11, 87, 208, 0.2);
+        }
+
+        .slider-btn-prev {
+            left: -28px;
+        }
+
+        .slider-btn-next {
+            right: -28px;
+        }
+
+        .slider-indicators {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--outline);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: var(--primary-blue);
+            transform: scale(1.3);
+            width: 24px;
+            border-radius: 6px;
+        }
+
+        /* Academic Credits Section */
+        .academic-section {
+            padding: 80px 0;
+            background: var(--surface-light);
+            border-top: 1px solid var(--outline);
+        }
+
+        .credits-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .credits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .profile-card {
+            background: var(--surface-white);
+            border-radius: var(--radius-xl);
+            padding: 36px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--outline);
+            display: flex;
+            gap: 28px;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-blue-light);
+        }
+
+        .profile-image-wrapper {
+            position: relative;
+            flex-shrink: 0;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--surface-variant);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .profile-card:hover .profile-image-wrapper {
+            border-color: var(--primary-blue);
+            transform: scale(1.05);
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .profile-tag {
+            align-self: flex-start;
+            background: var(--primary-blue-light);
+            color: var(--primary-blue-dark);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .profile-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .profile-role {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .profile-meta {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Responsive styling for new sections */
+        @media (max-width: 992px) {
+            .project-slide {
+                grid-template-columns: 1fr;
+                padding: 32px;
+                gap: 24px;
+            }
+            .project-slider {
+                height: auto;
+                min-height: 520px;
+            }
+            .slide-visual {
+                display: none; /* Hide visual part on small screens to fit text */
+            }
+            .credits-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+            .slider-btn {
+                display: none; /* Hide arrow buttons, rely on dots on mobile */
+            }
+        }
+
+        @media (max-width: 576px) {
+            .profile-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 24px;
+            }
+            .profile-image-wrapper {
+                width: 120px;
+                height: 120px;
+            }
+            .profile-tag {
+                align-self: center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -807,6 +1139,220 @@
         </div>
     </section>
 
+    <!-- Project Blueprint & Deep-Dive Slider Section -->
+    <section class="project-details-section">
+        <div class="slider-wrapper">
+            <div class="section-header text-center">
+                <h2 class="section-title">Project Blueprint & Deep-Dive</h2>
+                <p class="section-subtitle">
+                    Explore the inner workings and technical phases of the News Story Detective pipeline
+                </p>
+            </div>
+            
+            <div class="project-slider">
+                <div class="slide-container" id="projectDetailsSlider">
+                    <!-- Slide 1: Preprocessing -->
+                    <div class="project-slide active">
+                        <div class="slide-text">
+                            <span class="slide-label">
+                                <span class="material-icons" style="font-size: 16px;">cleaning_services</span>
+                                Phase 1 — Text Preprocessing Pipeline
+                            </span>
+                            <h3 class="slide-title">Cleaning & Tokenizing Raw Text</h3>
+                            <p class="slide-description">
+                                Before our machine learning model evaluates any article, the input text goes through a deterministic 7-step Natural Language Processing (NLP) pipeline built with NLTK to extract high-signal terms.
+                            </p>
+                            <ul class="slide-list">
+                                <li><span class="material-icons icon">check_circle</span> Cleans HTML tags, URLs, and residual markdown.</li>
+                                <li><span class="material-icons icon">check_circle</span> Normalizes all text to lowercase.</li>
+                                <li><span class="material-icons icon">check_circle</span> Splits raw paragraphs into single-word tokens.</li>
+                                <li><span class="material-icons icon">check_circle</span> Discards punctuation, special symbols, and standard English stopwords.</li>
+                                <li><span class="material-icons icon">check_circle</span> Lemmatizes terms to their root dictionary form (e.g., "soaring" → "soar").</li>
+                            </ul>
+                        </div>
+                        <div class="slide-visual">
+                            <div class="visual-box" style="font-family: var(--font-mono); font-size: 13px;">
+                                <div style="color: var(--text-secondary); margin-bottom: 8px; font-weight: bold; border-bottom: 1px solid var(--outline); padding-bottom: 4px;">[INPUT TEXT]</div>
+                                <div style="color: var(--text-primary); font-style: italic; margin-bottom: 16px; line-height: 1.4; white-space: normal;">"Tesla stock soars 15% following record quarterly earnings report..."</div>
+                                <div style="color: var(--text-secondary); margin-bottom: 8px; font-weight: bold; border-bottom: 1px solid var(--outline); padding-bottom: 4px;">[NLP PROCESSED TOKENS]</div>
+                                <div style="color: var(--primary-blue); font-weight: bold; line-height: 1.4; white-space: normal; word-break: break-all;">['tesla', 'stock', 'soar', 'record', 'quarterly', 'earning', 'report']</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Feature Extraction -->
+                    <div class="project-slide">
+                        <div class="slide-text">
+                            <span class="slide-label">
+                                <span class="material-icons" style="font-size: 16px;">tag</span>
+                                Phase 2 — TF-IDF Vectorization
+                            </span>
+                            <h3 class="slide-title">Converting Words into Features</h3>
+                            <p class="slide-description">
+                                Machine learning algorithms require numerical matrices to compute boundaries. We utilize Term Frequency-Inverse Document Frequency (TF-IDF) with sublinear scaling to build our high-dimensional mathematical space.
+                            </p>
+                            <ul class="slide-list">
+                                <li><span class="material-icons icon">check_circle</span> Maps the vocabulary space to 50,000 distinct dimensions.</li>
+                                <li><span class="material-icons icon">check_circle</span> Combines unigrams and bigrams (e.g. "artificial" + "intelligence").</li>
+                                <li><span class="material-icons icon">check_circle</span> Balances term frequency relative to total article occurrences.</li>
+                                <li><span class="material-icons icon">check_circle</span> Penalizes extremely common generic words while highlighting rare topic keywords.</li>
+                            </ul>
+                        </div>
+                        <div class="slide-visual">
+                            <div class="visual-box" style="font-family: var(--font-mono); font-size: 13px;">
+                                <div style="color: var(--text-secondary); margin-bottom: 8px; font-weight: bold; border-bottom: 1px solid var(--outline); padding-bottom: 4px;">[VECTORIZER SETTINGS]</div>
+                                <table style="width: 100%; border-collapse: collapse; margin-top: 8px;">
+                                    <tr style="border-bottom: 1px solid var(--outline);">
+                                        <td style="padding: 6px 0; color: var(--text-secondary);">Max Features:</td>
+                                        <td style="text-align: right; color: var(--text-primary); font-weight: bold;">50,000</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid var(--outline);">
+                                        <td style="padding: 6px 0; color: var(--text-secondary);">N-gram Range:</td>
+                                        <td style="text-align: right; color: var(--text-primary); font-weight: bold;">(1, 2)</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid var(--outline);">
+                                        <td style="padding: 6px 0; color: var(--text-secondary);">Sublinear TF:</td>
+                                        <td style="text-align: right; color: var(--text-primary); font-weight: bold;">True</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 6px 0; color: var(--text-secondary);">Norm:</td>
+                                        <td style="text-align: right; color: var(--primary-blue); font-weight: bold;">L2 Norm</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3: Model Evaluation -->
+                    <div class="project-slide">
+                        <div class="slide-text">
+                            <span class="slide-label">
+                                <span class="material-icons" style="font-size: 16px;">leaderboard</span>
+                                Phase 3 — Support Vector Machine
+                            </span>
+                            <h3 class="slide-title">Calibrated Maximum Margin</h3>
+                            <p class="slide-description">
+                                Out of four distinct algorithms trained, the Support Vector Machine (LinearSVC) achieved the best generalization. We wrap it in a Platt Scaling sigmoid calibrator to extract real-time confidence percentages.
+                            </p>
+                            <ul class="slide-list">
+                                <li><span class="material-icons icon">check_circle</span> Separation of sparse feature vectors using hyperplanes.</li>
+                                <li><span class="material-icons icon">check_circle</span> Platt Calibration converts distance-to-margin into probability.</li>
+                                <li><span class="material-icons icon">check_circle</span> Hyperparameter-tuned using L2 regularization penalty.</li>
+                                <li><span class="material-icons icon">check_circle</span> Sub-millisecond (0.8ms) inference latency.</li>
+                            </ul>
+                        </div>
+                        <div class="slide-visual">
+                            <div class="visual-box" style="font-family: var(--font-primary); font-size: 13px;">
+                                <div style="color: var(--text-secondary); margin-bottom: 8px; font-weight: bold; border-bottom: 1px solid var(--outline); padding-bottom: 4px;">[ACCURACY COMPARISON]</div>
+                                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 2px;">
+                                            <span style="font-weight: bold; color: var(--primary-blue);">SVM (LinearSVC)</span>
+                                            <span style="font-weight: bold;">92.8%</span>
+                                        </div>
+                                        <div style="background: var(--surface-variant); height: 8px; border-radius: 4px; overflow: hidden;">
+                                            <div style="background: var(--primary-blue); width: 92.8%; height: 100%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 2px;">
+                                            <span style="color: var(--text-secondary);">Logistic Reg.</span>
+                                            <span>92.4%</span>
+                                        </div>
+                                        <div style="background: var(--surface-variant); height: 8px; border-radius: 4px; overflow: hidden;">
+                                            <div style="background: var(--text-secondary); width: 92.4%; height: 100%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 2px;">
+                                            <span style="color: var(--text-secondary);">Naive Bayes</span>
+                                            <span>92.4%</span>
+                                        </div>
+                                        <div style="background: var(--surface-variant); height: 8px; border-radius: 4px; overflow: hidden;">
+                                            <div style="background: var(--text-secondary); width: 92.4%; height: 100%;"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 2px;">
+                                            <span style="color: var(--text-secondary);">Random Forest</span>
+                                            <span>89.2%</span>
+                                        </div>
+                                        <div style="background: var(--surface-variant); height: 8px; border-radius: 4px; overflow: hidden;">
+                                            <div style="background: var(--text-secondary); width: 89.2%; height: 100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 4: Dataset Composition -->
+                    <div class="project-slide">
+                        <div class="slide-text">
+                            <span class="slide-label">
+                                <span class="material-icons" style="font-size: 16px;">dns</span>
+                                Phase 4 — Balanced Corpus
+                            </span>
+                            <h3 class="slide-title">Robust & Balanced Dataset</h3>
+                            <p class="slide-description">
+                                To ensure zero bias across topics, the model was trained on exactly 7,500 articles. We balanced global standard datasets with Nigerian-specific news contexts.
+                            </p>
+                            <ul class="slide-list">
+                                <li><span class="material-icons icon">check_circle</span> 1,500 balanced entries for each of the 5 topical classes.</li>
+                                <li><span class="material-icons icon">check_circle</span> Integrates AG News corpus with Nigerian local journalism content.</li>
+                                <li><span class="material-icons icon">check_circle</span> 85% / 15% train/test stratified split.</li>
+                                <li><span class="material-icons icon">check_circle</span> Stratification guards against class distribution leakage.</li>
+                            </ul>
+                        </div>
+                        <div class="slide-visual">
+                            <div class="visual-box" style="font-family: var(--font-primary); font-size: 13px;">
+                                <div style="color: var(--text-secondary); margin-bottom: 8px; font-weight: bold; border-bottom: 1px solid var(--outline); padding-bottom: 4px;">[CORPUS BALANCING]</div>
+                                <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <span style="font-weight: 500; font-size: 12px; color: #1a56db;">Government & Politics</span>
+                                        <span style="font-family: var(--font-mono); font-size: 12px; font-weight: bold;">1,500</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <span style="font-weight: 500; font-size: 12px; color: #057a55;">Sports & Games</span>
+                                        <span style="font-family: var(--font-mono); font-size: 12px; font-weight: bold;">1,500</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <span style="font-weight: 500; font-size: 12px; color: #7e3af2;">Tech & Gadgets</span>
+                                        <span style="font-family: var(--font-mono); font-size: 12px; font-weight: bold;">1,500</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <span style="font-weight: 500; font-size: 12px; color: #d97706;">Movies & Music</span>
+                                        <span style="font-family: var(--font-mono); font-size: 12px; font-weight: bold;">1,500</span>
+                                    </div>
+                                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                                        <span style="font-weight: 500; font-size: 12px; color: #e02424;">Business & Money</span>
+                                        <span style="font-family: var(--font-mono); font-size: 12px; font-weight: bold;">1,500</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slider Navigation Buttons -->
+                <button class="slider-btn slider-btn-prev">
+                    <span class="material-icons">chevron_left</span>
+                </button>
+                <button class="slider-btn slider-btn-next">
+                    <span class="material-icons">chevron_right</span>
+                </button>
+            </div>
+
+            <!-- Indicators -->
+            <div class="slider-indicators">
+                <div class="slider-dot active" data-slide="0"></div>
+                <div class="slider-dot" data-slide="1"></div>
+                <div class="slider-dot" data-slide="2"></div>
+                <div class="slider-dot" data-slide="3"></div>
+            </div>
+        </div>
+    </section>
+
     <!-- Stats Section -->
     <section class="stats">
         <div class="stats-container">
@@ -930,16 +1476,59 @@
         </div>
     </section>
 
+    <!-- Academic Credits Section -->
+    <section class="academic-section">
+        <div class="credits-container">
+            <div class="section-header text-center">
+                <h2 class="section-title">Research Credits & Academic Team</h2>
+                <p class="section-subtitle">
+                    The minds behind the research, system modeling, implementation, and academic supervision
+                </p>
+            </div>
+            
+            <div class="credits-grid">
+                <!-- Academic Supervisor -->
+                <div class="profile-card">
+                    <div class="profile-image-wrapper">
+                        <img src="/static/images/lecturer_odulaja.png" alt="Dr. G.O. Odulaja" class="profile-image">
+                    </div>
+                    <div class="profile-info">
+                        <span class="profile-tag">Research Supervisor</span>
+                        <h3 class="profile-name">Dr. G.O. Odulaja</h3>
+                        <p class="profile-role">Senior Lecturer & Academic Advisor</p>
+                        <p class="profile-meta">
+                            <span class="material-icons" style="font-size: 16px; color: var(--primary-blue);">school</span>
+                            Dept. of Computer & Information Science, TASUED
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Student Researcher -->
+                <div class="profile-card">
+                    <div class="profile-image-wrapper">
+                        <img src="/static/images/student_jamiu.png" alt="Otasanya Jamiu Olamilekan" class="profile-image">
+                    </div>
+                    <div class="profile-info">
+                        <span class="profile-tag">Student Researcher</span>
+                        <h3 class="profile-name">Otasanya J. Olamilekan</h3>
+                        <p class="profile-role">Lead Developer & ML Engineer</p>
+                        <p class="profile-meta">
+                            <span class="material-icons" style="font-size: 16px; color: var(--primary-blue);">badge</span>
+                            Matric No: 20220204057 | CIS Dept
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h4>Academic Project</h4>
-                    <p>TASUED Department of Computer & Information Science</p>
-                    <p>Student: Otasanya Jamiu Olamilekan</p>
-                    <p>Matric No: 20220204057</p>
-                    <p>Supervisor: Dr. G.O. Odulaja</p>
+                    <h4>News Story Detective</h4>
+                    <p>An advanced academic machine learning research project dedicated to the automated topical classification and linguistic analysis of news article content.</p>
                 </div>
                 <div class="footer-section">
                     <h4>Technical Details</h4>
@@ -1051,6 +1640,91 @@
                 }
             }
         }
+
+        // Project Detail Slider Functionality
+        class ProjectDetailSlider {
+            constructor() {
+                this.currentSlide = 0;
+                this.slides = document.querySelectorAll('.project-slide');
+                this.dots = document.querySelectorAll('.slider-dot');
+                this.totalSlides = this.slides.length;
+                this.interval = null;
+                this.isTransitioning = false;
+                
+                this.init();
+            }
+            
+            init() {
+                // Navigation buttons
+                const nextBtn = document.querySelector('.slider-btn-next');
+                const prevBtn = document.querySelector('.slider-btn-prev');
+                
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => this.nextSlide());
+                }
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => this.prevSlide());
+                }
+                
+                // Indicators click
+                this.dots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => this.goToSlide(index));
+                });
+                
+                // Auto rotate slides
+                this.startAuto();
+                
+                // Pause auto rotation on hover
+                const container = document.querySelector('.project-slider');
+                if (container) {
+                    container.addEventListener('mouseenter', () => this.stopAuto());
+                    container.addEventListener('mouseleave', () => this.startAuto());
+                }
+            }
+            
+            goToSlide(index) {
+                if (this.isTransitioning || index === this.currentSlide) return;
+                this.isTransitioning = true;
+                
+                const current = this.slides[this.currentSlide];
+                const next = this.slides[index];
+                
+                current.classList.remove('active');
+                current.classList.add('exit');
+                this.dots[this.currentSlide].classList.remove('active');
+                
+                this.currentSlide = index;
+                
+                setTimeout(() => {
+                    this.slides.forEach(s => s.classList.remove('exit'));
+                    next.classList.add('active');
+                    this.dots[this.currentSlide].classList.add('active');
+                    this.isTransitioning = false;
+                }, 400);
+            }
+            
+            nextSlide() {
+                const nextIdx = (this.currentSlide + 1) % this.totalSlides;
+                this.goToSlide(nextIdx);
+            }
+            
+            prevSlide() {
+                const prevIdx = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+                this.goToSlide(prevIdx);
+            }
+            
+            startAuto() {
+                this.stopAuto();
+                this.interval = setInterval(() => this.nextSlide(), 6000);
+            }
+            
+            stopAuto() {
+                if (this.interval) {
+                    clearInterval(this.interval);
+                    this.interval = null;
+                }
+            }
+        }
         
         // Enhanced Background Animations
         function createFloatingParticles() {
@@ -1130,7 +1804,7 @@
             }, observerOptions);
             
             // Observe elements for animation
-            document.querySelectorAll('.feature-card, .category-card, .stat-item').forEach(el => {
+            document.querySelectorAll('.feature-card, .category-card, .stat-item, .profile-card, .project-slider').forEach(el => {
                 el.style.opacity = '0';
                 el.style.transform = 'translateY(30px)';
                 observer.observe(el);
@@ -1141,6 +1815,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Initialize carousel
             new NewsCarousel();
+            
+            // Initialize project detail slider
+            new ProjectDetailSlider();
             
             // Initialize other enhancements
             createFloatingParticles();
